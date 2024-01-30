@@ -1,32 +1,26 @@
+// server.js
 import express from 'express';
-import { createHandler } from 'graphql-http';
-import { GraphQLSchema, GraphQLObjectType, GraphQLString } from 'graphql';
+import { fetchShopifyProducts } from './shopifyApi.js';
+import { insertProductsIntoDatabase } from './schema.js';
+import 'dotenv/config';
+
 
 const app = express();
-
-// Construct a GraphQL schema and define the necessary resolvers.
-const schema = new GraphQLSchema({
-    query: new GraphQLObjectType({
-        name: 'Query',
-        fields: {
-            products: {
-                type: GraphQLString,
-                resolve: () => 'world',
-            },
-        },
-    }),
-});
-
-// Create the GraphQL over HTTP request handler
-const handler = createHandler({ schema });
-
-// Create an Express app using the handler on `/graphql`
-app.use('/graphql', (req, res) => {
-    handler(req, res);
-});
-
-// Start the server
 const PORT = process.env.PORT || 5000;
+
+app.get('/updateProducts', async (req, res) => {
+    try {
+        const shopifyProducts = await fetchShopifyProducts();
+
+        await insertProductsIntoDatabase(shopifyProducts);
+
+        res.status(200).json({ success: true, message: 'Products updated successfully' });
+    } catch (error) {
+        console.error('Error updating products:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

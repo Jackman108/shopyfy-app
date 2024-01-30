@@ -16,7 +16,7 @@ client/build
 
 # misc
 client/.DS_Store
-server/.env.local
+server/.env
 
 
 npm-debug.log*
