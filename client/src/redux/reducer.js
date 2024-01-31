@@ -1,3 +1,4 @@
+//src/redux/reducer.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const productsSlice = createSlice({
@@ -5,6 +6,8 @@ const productsSlice = createSlice({
     initialState: [],
     reducers: {
         setProducts: (state, action) => {
+            console.log('Received Payload:', action.payload);
+
             return action.payload;
         },
     },

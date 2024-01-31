@@ -11,7 +11,19 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD || 'postgres',
     port: process.env.DB_PORT || 5432,
 });
+export const fetchProductsFromDatabase = async () => {
+    const client = await pool.connect();
 
+    try {
+        const result = await client.query('SELECT * FROM products');
+        return result.rows;
+    } catch (error) {
+        console.error('Error fetching products from database:', error);
+        throw error;
+    } finally {
+        client.release();
+    }
+};
 export const insertProductsIntoDatabase = async (products) => {
     const client = await pool.connect();
 
