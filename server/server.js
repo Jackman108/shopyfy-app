@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Замените на актуальный URL вашего React-приложения
+    origin: 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204,
@@ -18,7 +18,7 @@ app.use(cors({
 app.get('/getProducts', async (req, res) => {
     try {
         // Fetch products from the database
-        const products = await fetchFromDB(); // Use the imported function
+        const products = await fetchFromDB(); 
         // Set the Content-Type header to indicate JSON response
         res.setHeader('Content-Type', 'application/json');
 
