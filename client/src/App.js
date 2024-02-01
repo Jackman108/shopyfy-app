@@ -3,35 +3,23 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setProducts } from './redux/reducer';
 import ProductGrid from './components/ProductGrid';
+import fetchProducts from './api/productApi'; 
 import './App.css';
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5050/getProducts');
-        console.log('Raw Server Response:', response);
-
-        if (!response.ok) {
-          throw new Error(`Server response not OK: ${response.status}`);
-        }
-
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const responseData = await response.json();
-                dispatch(setProducts(responseData));
-        } else {
-          console.error('Unexpected response type:', contentType);
-          // Handle non-JSON responses here
-        }
+        const responseData = await fetchProducts();
+        dispatch(setProducts(responseData));
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error in fetching products:', error);
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, [dispatch]);
 
   return (
